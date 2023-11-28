@@ -1,0 +1,188 @@
+---
+title: "ITS_LIVE: A Cloud-Native Approach to Monitoring Glaciers from Space"
+author:
+  - name: Luis A. López
+    email: luis.lopezespinosa@colorado.edu
+    affiliations: 
+        - id: NSIDC
+          name: NSIDC
+          department: University of Colorado Boulder
+  - name: Alex S. Gardner
+    orcid: 0000-0002-8394-8889
+    email: alex.s.gardner@jpl.nasa.gov
+    affiliations:
+        - id: NASA
+          name: NASA
+          department: Jet Propulsion Laboratory, California Institute of Technology
+  - name: Chad A. Greene
+    email: chad.a.greene@jpl.nasa.gov
+    orcid: 0000-0001-6710-6297
+    affiliations:
+        - id: NASA
+          name: NASA
+          department: Jet Propulsion Laboratory, California Institute of Technology
+  - name: Mark Fahnestock
+    email: mfahnestock@alaska.edu
+    affiliations:
+        - id: UAF
+          name: UAF 
+          department: Geophysical Institute
+  - name: Joseph H. Kennedy
+    email: jhkennedy@alaska.edu
+    affiliations:
+        - id: UAF
+          name: UAF
+          department: Alaska Satellite Facility
+  - name: Maria Liukis
+    email: maria.liukis@jpl.nasa.gov
+    affiliations:
+        - id: NASA
+          name: NASA
+          department: Jet Propulsion Laboratory, California Institute of Technology
+  - name:  Theodore A Scambos
+    email: tascambos@Colorado.EDU
+    affiliations:
+        - id: CIRES
+          name: CIRES
+          department: Earth Science and Observation Center
+  - name:  Jacob R. Fahnestock
+    email: jrfz31@gmail.com
+    affiliations:
+        - id: Wentworth Institute of Technology
+          name: Wentworth Institute of Technology
+abstract: |
+  NASA's ITS_LIVE project delivers information on global glacier dynamics and provides historical context for climate change with a record of how every glacier in the world has evolved over decades of satellite observation. To handle petabytes of data in the satellite archives and a constant influx of new observations, the project has adopted a cloud-native approach that is scalable, performant, user friendly, and embraces transparent and collaborative code development. As every discipline of Earth science is being transformed by a new era of remote sensing and cloud computing, ITS_LIVE offers a progressive approach to maximizing scientific advancements through open science.
+keywords: 
+  - glaciology
+  - climate change
+  - big data
+  - cloud computing
+date: last-modified
+bibliography: bibliography.bib
+format:
+  elsevier-pdf:
+    keep-tex: true
+    journal:
+      name: IEEE VizCorner
+      formatting: preprint
+      model: 3p
+      layout: twocolumn
+      cite-style: super
+---
+
+**—A changing landscape for Earth Science**
+
+⏹️  Earth Science is being upended by an explosion in remote sensing data collection (Fig. 1),  advancements in cloud computing technology, and a cultural shift toward open science. The global satellite data record has grown too large to be downloaded and analyzed on personal computers, machine-learning algorithms have grown too complex to be maintained by any single research group, and there is a growing recognition that public investments in research are compounded when code is open. 
+NASA is embracing the new paradigm, and is moving all Earth observation data archives into Earthdata cloud https://www.earthdata.nasa.gov/eosdis/cloud-evolution as part of the Transform to Open Science initiative https://nasa.github.io/Transform-to-Open-Science/. Here we show how NASA's MEaSUREs program is pushing Earth Science into the cloud computing era with automated production, open code, intelligent cloud-optimized data products, single-line-of-code data access and subsetting, and no-code, user-friendly interfaces for data exploration and visualization as developed for the ITS_LIVE project https://its-live.jpl.nasa.gov.
+
+**—Canaries in a Coalmine**
+
+The ITS_LIVE project serves a community of researchers who study how glaciers have, and will, respond to our changing climate. By measuring how glaciers interact with the Earth System, scientists can form better predictions on sea level rise and potential impacts on ocean circulation, Earth’s energy budget, agriculture, hydropower generation, and water security for large populations.
+
+Glaciers are often seen as "canaries in the coalmine", responding to a warming environment well before other impacts of climate change . But to benefit from Earth’s natural early-warning systems requires near-real-time monitoring of all the world’s glaciers at high spatial and temporal resolution. ITS_LIVE continuously processes, assimilates, and harmonizes data from multiple satellites and sensors including optical imagers, and synthetic aperture radars to produce a high-resolution, near-real-time picture of ice velocity worldwide. Products are available and ready to be integrated into diverse scientific workflows shortly after acquisition. To date, the project has processed nearly 10 petabytes (2^50 bytes) of archival satellite imagery using complex algorithms to extract the geophysical variable of interest. Such an effort is made feasible by the scalable architecture of cloud computing that provides access to tens of thousands of computational cores co-located with satellite data archives.
+
+**—Measuring glacier flow from space**
+
+ITS_LIVE measures glacier flow from space using the project’s open-source algorithm [autoRIFT @Lei2021-nu;@Gardner2018-eu] which can be applied to optical or radar satellite data to measure horizontal displacements of subtle features in repeat images, with sub-pixel accuracy. ITS_LIVE currently uses autoRIFT to process all relevant Landsat and Sentinel-2 optical satellite imagery and all Sentinel-1 radar satellite imagery to measure glacier velocity. As of writing, ITS_LIVE has processed more than 22 million image pairs and generated an equal number of NetCDF files (granules) that contain high-resolution (120 m) velocity data. Granules are restructured into analysis-ready Zarr[3] data cubes that are optimized for time series analysis, providing access to all data from 1984 to present for any 120 m by 120 m point on a glacier within a second or two. In all, ITS_LIVE has created more than 138 TB of data. The archive is expected to grow at a rate of about 5-10 TB per month, as it is a living dataset that will grow with time, as new data are acquired, and new sensors are assimilated.
+
+**—Scaling to 10s of thousands of cores**
+
+ITS_LIVE data processing uses a cloud-first approach to minimize downloading of data and to optimize for rapid data access and large-scale analysis. Dataset generation is carried out in Amazon AWS using [HyP3 @Hogenson2023-cj] , scaling to >10,000 cores. HyP3 is an open-source, cloud-native batch processing pipeline developed by the Alaska Satellite Facility for processing optical and Synthetic Aperture Radar (SAR) imagery that addresses many common issues for users of SAR data. Most analysis code is run in the US-West-2 region where the majority of the imagery is archived while the Sentinel-2 processing is run in EU-Central-1.
+
+**—The importance of user aligned cloud optimized data**
+
+Analyzing and visualizing millions of NetCDF files is not an easy task and historically has required prohibitive computing resources. To address data accessibility challenges, ITS_LIVE  produces cloud optimized data products. To facilitate efficient access data needs to be cloud optimized so that the stored objects can be efficiently retrieved and the objects themselves need to be structured in a way that minimizes the number of objects that need to be located and the amount of data (or chunks) that need to be uncompressed. When done properly, well structured data eliminates the need for complex and computationally expensive web services to subset and transform the data. Development of such a product requires a deep understanding of user access patterns.
+
+ITS_LIVE users, like [most Earth Scientists @abernathey2021cloud;@Marshall2022-je], primarily access the raw data in two ways: (1) spatial exploration and (2) temporal exploration. Spatial exploration is supported through library access to the millions of NetCDF granules that can be identified programmatically using an OpenAPI search or interactively using the ITS_LIVE webtool. Temporal exploration is accommodated by a restructuring of the NetCDF granules into Zarr datacubes that are composed of 10 x 10 x 20,000 chunked data, where 10 x 10 is in the spatial domain and 20,000 is in the temporal domain. This chunking scheme minimizes the amount of data that needs to be uncompressed for a time series at a single location, providing near-zero latency for temporal exploration, which is critical for process understanding and change detection.
+
+ITS_LIVE also provides annual regional mosaics of glacier velocities for those users that require less dense temporal sampling. Mosaics are posted at the native 120 m spatial resolution and provide additional gridded metrics, such as measurement error and data count. The annual mosaics are provided as both metadata-complete NetCDFs and cloud optimized geotiffs.
+
+{{< pagebreak >}}
+
+The intelligently structured, cloud-optimized ITS_LIVE data formatting, and user-friendly analytical tools developed for the project, together enable rapid development of code that can be run on a personal computer or in the cloud. Structuring the data in a way that supports low-latency access makes it painless for users to develop code that streams the data directly from the cloud, supplanting the need for local archives. Such code is immensely more reproducible as it can be run on any computer with an internet connection, without the need to recreate local data archives and update local paths.
+
+**—Serverless access, exploration and visualization**
+
+ITS_LIVE provides users with intuitive no-code options to explore the rich dataset through a Voila-based dashboard and a serverless application [Fig. @fig-3] In the following pages we present some of the data visualizations we can obtain from using ITS_LIVE data without costly pre-processing steps using open-source GIS tools like QGIS[8] and the Pangeo stack in Python ([Xarray @Hoyer2017-su], [Zarr @Miles2023-yj] , etc). A companion GitHub repository contains all the notebooks and QGIs projects used to generate the figures in this article. The focus areas include Malaspina Glacier in Alaska (@fig-2;@fig-5), Pine Island Glacier in Antarctica and Antarctic ice shelves (@fig-4)
+
+{{< pagebreak >}}
+ 
+::: {#fig-1 fig-env="figure*"}
+
+![](figures/figure-1-consolidated.jpg)
+
+[See @Miles2023-yj;@Scambos1992-jz]
+:::
+
+
+::: {#fig-2 fig-env="figure*"}
+
+![](figures/figure-4.jpg)
+
+The Jupyter-based dashboard https://itslive-dashboard.labs.nsidc.org/ and web based widget https://nasa-jpl.github.io/itslive-web/ let us query time series of glacier velocity and export the data into familiar formats like NetCDF or CSV files. A single time series query can contain more than 200k data points. Despite the size of the dataset rendering these time series usually take less than 3 seconds to be completed thanks to the time-aligned chunking.  Malaspina glacier (center) in Alaska is one of the glaciers that have shown a recent surge in activity (rapid acceleration). Near real time data processed by ITS_LIVE has helped scientists plan field campaigns to place in situ instruments to study the surge in detail.
+
+:::
+
+::: {#fig-3 fig-env="figure*"}
+
+![](figures/figure-5.png)
+
+ITS_LIVE gives users who are not familiar with APIs and programming languages a way to explore the rich dataset and to begin analysis, regardless of whether they wish to work locally from a laptop or in the cloud. ITS_LIVE dashboards allow users to search, visualize, and download data without the need for a single line of code, and a client-side only prototype now provides most of the functionality of the Jupyter-based dashboard but without the need of any back-end [server @Fahnestock2023-fu]
+
+:::
+
+
+::: {#fig-4 fig-env="figure*"}
+
+![](figures/figure-6.jpg)
+
+Info-graphic showing the surface velocity of the West Antarctic Ice Sheet that is vulnerable to ocean-melting induced [collapse @Joughin2011-mq;@Greene2022-uo;@Naughten2023]
+
+:::
+
+
+::: {#fig-5 fig-env="figure*"}
+
+![](figures/figure-7.jpg)
+
+What looks like a frequency spectrogram on the right in  this figure is a velocity profile along sampled points in Malaspina glacier in Alaska (above) , with the first point at the lower end of the ice (0 km at the left edge). In this plot the ice is flowing from left to right (A to B). One can see the seasonal cycle in speed (slowest in Fall) in the upper glacier, and the surges of the Malaspina in indicated years, including 2020 and 2021, when the entire glacier along this centerline reached speeds > 2500 m/yr, or 6.8 m/day.
+
+:::
+
+
+{{< pagebreak >}}
+
+
+\clearpage
+
+**—Keys to success**
+
+Earth Science is undergoing a major transition, from being data-poor to data-rich. The old paradigm of navigating to a webpage, downloading data and working with it locally on one’s computer is quickly dying. We are now entering an era where we will expect shared code to link to low-latency cloud-accessible datasets so the analysis code can run out-of-the-box and be truly reproducible. By breaking down traditional disciplinary barriers of engineering, technology, and Earth science, ITS_LIVE has developed optimized technical solutions to obstacles that might otherwise stand in the way of creating, accessing, exploring, and visualizing such novel and complex datasets. ITS_LIVE was built on Findable, Accessible, Interoperable, and Reusable (FAIR) data principles, and has mitigated many of the challenges surrounding rapid time series analysis of massive archives. Providing intelligently structured cloud-optimized glacier velocity data reduces the demand for expertise in remote sensing and geospatial analysis, making the data more accessible to a broader range of researchers. By designing to meet user needs and enlisting the help of experts in cloud computing, ITS_LIVE has built an active and growing community of scientists that are generating new insights into why and how glaciers have responded to changes in their environment, giving clues as to what our future might hold.
+
+
+**Acknowledgments**
+
+* The ITS_LIVE user community for their helpful  feedback.
+* Pangeo community.
+* Copernicus Sentinel data processed by ESA.
+* Landsat data courtesy of the U.S. Geological Survey.
+* Funding for ITS_LIVE provided by the NASA MEaSUREs program.
+* A portion of this work was conducted at the Jet Propulsion Laboratory, California Institute of Technology, under contract with the National Aeronautics and Space Administration ©2023 All rights reserved.
+
+
+***
+
+**Luis A. López** is a Research Software Engineer currently working with the National Snow and Ice Data Center in Boulder, Colorado. His research interests include remote sensing data workflows, cloud computing and open science. Contact him at luis.lopez@nsidc.org
+
+**Alex S. Gardner** is the ITS_LIVE Principle Investigator and a NASA Research Scientist at the Jet Propulsion Laboratory in Pasadena, California. He studies the Earth's cryosphere (frozen Earth) with a particular focus on glaciers and ice sheets and their impacts on sea level rise and water resources. 
+
+**Chad A. Greene** is a NASA Research Scientist at Jet Propulsion Laboratory, California Institute of Technology. He uses satellite and airborne remote sensing to study the Earth's cryosphere, and is a former editor of the Proceedings of the National Academy of Sciences.
+
+**Joseph H. Kennedy** is a Computational Scientist at the Alaska Satellite Facility in Fairbanks, AK. He specializes in building Big Data processing and analysis platforms for Earth data and studies the Earth system using HPC models.
+
+**Maria Liukis** is an Engineering Applications Software Engineer at the Jet Propulsion Laboratory, Pasadena CA. With a specialization in scientific programming, she assists scientists in addressing computational challenges, while also contributing to software development for various missions and tools.
+
+**Mark A. Fahnestock** is a Research Professor in the Snow, Ice, and Permafrost group at the Geophysical Institute of the University of Alaska Fairbanks. He studies glaciers and ice sheets with a focus on observational constraints on change
+
+# References {-}
+

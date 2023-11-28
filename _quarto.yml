@@ -1,0 +1,4 @@
+project:
+  render:
+    - paper.qmd
+  output-dir: docs

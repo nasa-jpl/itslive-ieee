@@ -1,0 +1,29 @@
+name: itslive
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9.*
+  - jupyterlab
+  - cartopy
+  - fiona
+  - geopandas
+  - ipyleaflet
+  - matplotlib-base
+  - pyproj
+  - ipympl
+  - pandas
+  - numpy
+  - s3fs
+  - shapely
+  - xarray
+  - markdown
+  - voila
+  - zarr
+  - h5netcdf
+  - netcdf4
+  - bqplot
+  - sidecar
+  - pip
+  - pip:
+    - itslive
+    - utm
